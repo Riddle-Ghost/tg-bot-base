@@ -6,10 +6,14 @@ use TgBase\Output;
 use Telegram\Bot\Api;
 use TgBase\TgBotConfig;
 use Telegram\Bot\Objects\Update;
+use TgBase\User\Db\UserRepository;
+use TgBase\User\Entity\Settings;
+use TgBase\User\Entity\User;
 
 class TgBot
 {
     private Api $api;
+    private UserRepository $userRepository;
 
     public function __construct(
         private TgBotHandlerInterface $tgBotHandler,
@@ -18,6 +22,7 @@ class TgBot
     {
         $this->api = new Api($this->tgBotConfig->tgBotToken);
         $this->api->deleteWebhook();
+        $this->userRepository = new UserRepository();
     }
 
     public function run()
@@ -27,7 +32,6 @@ class TgBot
         while (count($updates) > 0) {
             foreach ($updates as $update) {
 
-                // var_dump($update);die;
                 $output = $this->handleEvent($update);
 
                 $chatId = $update->getChat()->getId();
@@ -52,7 +56,7 @@ class TgBot
     private function getUpdates(?int $offset = null): array
     {
         $updates = $this->api->getUpdates([
-            'timeout' => 1, //Check for new messages every ... seconds
+            'timeout' => 5, //Check for new messages every ... seconds
             'offset' => $offset,
         ]);
 
@@ -61,45 +65,43 @@ class TgBot
 
     private function handleEvent(Update $update): ?Output
     {
+        $user = $this->getUser($update);
+        $relatedObject = $update->getRelatedObject();
+
         if ($update->isType('callback_query')) {
-            $callbackQuery = $update->getRelatedObject();
 
             $input = new Input(
-               $callbackQuery->getData(),
+               $relatedObject->getData(),
                Input::TYPE_BUTTON,
-               $callbackQuery->getChat()->getId(),
-               $callbackQuery->getChat()->getUsername()
+               $user,
             );
            
             return $this->tgBotHandler->handleButton($input);
         }
 
         if ($update->isType('message')) {
-            $message = $update->getMessage();
 
-            if ($message->hasCommand()) {
+            if ($relatedObject->hasCommand()) {
 
                 $input = new Input(
-                    $message->getText(),
+                    $relatedObject->getText(),
                     Input::TYPE_COMMAND,
-                    $message->getChat()->getId(),
-                    $message->getChat()->getUsername()
+                    $user,
                 );
 
 
-                if ($message->getText() === '/start') {
+                if ($relatedObject->getText() === '/start') {
                     return $this->tgBotHandler->handleStart($input);
                 }
 
                 return $this->tgBotHandler->handleCommand($input);
             }
 
-            if ($message->isType('text')) {
+            if ($relatedObject->isType('text')) {
                 $input = new Input(
-                    $message->getText(),
+                    $relatedObject->getText(),
                     Input::TYPE_MESSAGE,
-                    $message->getChat()->getId(),
-                    $message->getChat()->getUsername()
+                    $user,
                 );
 
                 return $this->tgBotHandler->handleMessage($input);
@@ -107,5 +109,27 @@ class TgBot
         }
 
         return null;
+    }
+
+    private function getUser(Update $update): User
+    {
+        $tgId = $update->getRelatedObject()->getChat()
+            ? $update->getRelatedObject()->getChat()->getId()
+            : $update->getRelatedObject()->getMessage()->getChat()->getId();
+
+        $user = $this->userRepository->getByTgId($tgId);
+        if (!$user) {
+            $user = new User(
+                id: null,
+                tgId: $tgId,
+                username: $update->getRelatedObject()->getChat()->getUsername(),
+                isPremium: false,
+                isBlocked: false,
+                settings: new Settings()
+            );
+            $this->userRepository->save($user);
+        }
+
+        return $user;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace TgBase;
 
-interface TgBotHandlerInterface {
-
+interface TgBotHandlerInterface
+{
     public function handleStart(Input $input): Output;
 
     public function handleButton(Input $input): Output;

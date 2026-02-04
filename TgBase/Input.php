@@ -2,6 +2,8 @@
 
 namespace TgBase;
 
+use TgBase\User\Entity\User;
+
 class Input
 {
     public const TYPE_MESSAGE = 'message';
@@ -11,7 +13,6 @@ class Input
     public function __construct(
         public readonly string $text,
         public readonly string $type,
-        public readonly int $fromUserId,
-        public readonly string $fromUsername,
+        public readonly User $user,
     ) {}
 }

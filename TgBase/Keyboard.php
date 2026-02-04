@@ -7,6 +7,9 @@ use Telegram\Bot\Keyboard\Button;
 
 class Keyboard
 {
+    public const CURRENT_BUTTON = '✅';
+    public const DEFAULT_ROW_SIZE = 4;
+
     private TelegramKeyboard $keyboard;
 
     public function __construct()
@@ -18,6 +21,25 @@ class Keyboard
     public static function button(string $text, string $callbackData): Button
     {
         return TelegramKeyboard::inlineButton(['text' => $text, 'callback_data' => $callbackData]);
+    }
+
+    public static function buttonToStart(): Button
+    {
+        return self::button(text: 'К началу', callbackData: '/start');
+    }
+
+    /**
+     * @param Button[] $buttons
+     */
+    public function addRows(array $buttons, ?int $rowSize = self::DEFAULT_ROW_SIZE): self
+    {
+        while (count($buttons) > $rowSize) {
+            $subset = array_splice($buttons, 0, $rowSize);
+            $this->addRow($subset);
+        }
+
+        $this->addRow($buttons);
+        return $this;
     }
 
     /**
