@@ -1,11 +1,11 @@
 {
-  "name": "riddle/tg-base",
-  "description": "Описание моей библиотеки",
+  "name": "riddle/tg-bot-base",
+  "description": "Базовая библиотека для Telegram ботов",
   "type": "library",
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "Riddle\\TgBase\\": "src/TgBase/"
+      "Riddle\\TgBotBase\\": "src/TgBotBase/"
     }
   },
   "require": {
