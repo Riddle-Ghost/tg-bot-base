@@ -4,16 +4,15 @@ namespace Riddle\TgBotBase\Db;
 
 require_once __DIR__ . '/rb-sqlite.php';
 
-class DbStart
+class DbHelper
 {
     public static function init(): void
     {
         \R::setup('sqlite:./default.sqlite');
         \R::addDatabase('logs', 'sqlite:./db_logs.sqlite');
-        // \R::addDatabase('users', 'sqlite:./db_users.sqlite');
 
         self::initTables();
-        // \R::freeze(true); // RedBean не будет пытаться менять структуру БД
+        \R::freeze(true); // RedBean не будет пытаться менять структуру БД
     }
 
     private static function initTables(): void

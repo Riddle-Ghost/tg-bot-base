@@ -2,14 +2,15 @@
 
 namespace Riddle\TgBotBase\BotCore;
 
+use Telegram\Bot\Api;
+use Telegram\Bot\Objects\Update;
+use Riddle\TgBotBase\Db\DbHelper;
+use Riddle\TgBotBase\User\Entity\User;
 use Riddle\TgBotBase\BotCore\Dto\Input;
 use Riddle\TgBotBase\BotCore\Dto\Output;
-use Telegram\Bot\Api;
 use Riddle\TgBotBase\BotCore\TgBotConfig;
-use Telegram\Bot\Objects\Update;
-use Riddle\TgBotBase\User\Db\UserRepository;
 use Riddle\TgBotBase\User\Entity\Settings;
-use Riddle\TgBotBase\User\Entity\User;
+use Riddle\TgBotBase\User\Db\UserRepository;
 
 class TgBot
 {
@@ -21,8 +22,10 @@ class TgBot
         private TgBotConfig $tgBotConfig
     )
     {
+        DbHelper::init();
         $this->api = new Api($this->tgBotConfig->tgBotToken);
         $this->api->deleteWebhook();
+        $this->addCommands();
         $this->userRepository = new UserRepository();
     }
 
@@ -112,10 +115,14 @@ class TgBot
         return null;
     }
 
-    private function addCommands()
+    private function addCommands(): void
     {
-        // async def _addCommands(self):
-        //     await self.bot.set_my_commands(self.handler.commands())
+        $commands = [
+            ['command' => 'start', 'description' => 'Запуск'],
+            ['command' => 'help', 'description' => 'Помощь'],
+        ];
+        $this->api->setMyCommands($commands);
+
 
         //     # Получаем и выводим актуальный список команд
         //     actualCommands = await self.bot.get_my_commands()

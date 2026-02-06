@@ -29,7 +29,6 @@ class UserRepository
     {
         $bean = $this->getModel($entity->tgId);
 
-        // Если записи нет, создаем новую "бину" (bean)
         if (!$bean) {
             $bean = \R::dispense('user');
             $bean->tg_id = $entity->tgId;
