@@ -23,12 +23,12 @@ class Keyboard
         return TelegramKeyboard::inlineButton(['text' => $text, 'callback_data' => $callbackData]);
     }
 
-    public static function buttonToStart(): Button
+    public static function buttonStart(): Button
     {
         return self::button(text: 'К началу', callbackData: '/start');
     }
 
-    private function buttonSettings(): Button
+    public static function buttonSettings(): Button
     {
         return self::button("Количество кнопок в ряду", "/settings_keyboard-row");
     }
