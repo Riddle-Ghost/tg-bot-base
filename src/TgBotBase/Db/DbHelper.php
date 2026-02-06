@@ -12,11 +12,14 @@ class DbHelper
         \R::addDatabase('logs', 'sqlite:' . $config->dbDir . '/db_logs.sqlite');
 
         foreach ($config->sqlExecutions as $sql) {
-            var_dump($sql);
             \R::exec($sql);
         }
         self::initTables();
         \R::freeze(true); // RedBean не будет пытаться менять структуру БД
+
+        foreach ($config->sqlExecutionFiles as $file) {
+            self::executeSql($file);
+        }
     }
 
     private static function initTables(): void
@@ -64,5 +67,28 @@ class DbHelper
         \R::exec("CREATE  INDEX IF NOT EXISTS idx_user_id ON log (user_id)");
 
         \R::selectDatabase('default');
+    }
+
+    /**
+     * Выполняет SQL команды из файла
+     */
+    public static function executeSql(string $filePath): void
+    {
+        if (!file_exists($filePath)) {
+            throw new \InvalidArgumentException("SQL файл не найден: {$filePath}");
+        }
+
+        $sql = file_get_contents($filePath);
+        if ($sql === false) {
+            throw new \RuntimeException("Не удалось прочитать SQL файл: {$filePath}");
+        }
+
+        $statements = array_filter(array_map('trim', explode(';', $sql)));
+        
+        foreach ($statements as $statement) {
+            if (!empty($statement)) {
+                \R::exec($statement);
+            }
+        }
     }
 }

@@ -47,7 +47,8 @@ class TgBot
                     $response = $this->api->sendMessage([
                         'chat_id' => $chatId,
                         'text' => $output->text,
-                        'reply_markup' => $output->keyboard
+                        'reply_markup' => $output->keyboard,
+                        'parse_mode' => $output->parseMode,
                     ]);
                 }
                 $offset = $update->getUpdateId() + 1;
