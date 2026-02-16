@@ -14,7 +14,9 @@ class BaseApi implements ApiInterface
     private Client $client;
 
     public function __construct(
-        protected AiConfig $config,
+        public readonly string $url,
+        public readonly string $token,
+        public readonly string $model,
     )
     {
         $this->client = new Client();
@@ -26,20 +28,16 @@ class BaseApi implements ApiInterface
      */
     public function request(AiContext $aiContext): string
     {
-        if (!$this->config->url || !$this->config->token || !$this->config->model) {
-            throw new InvalidArgumentException("Missing required environment variables for AI API configuration");
-        }
-
         try {
-            $response = $this->client->post($this->config->url, [
+            $response = $this->client->post($this->url, [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->config->token,
+                    'Authorization' => 'Bearer ' . $this->token,
                     'Accept'        => 'application/json',
                 ],
                 // Опция 'json' автоматически кодирует массив в JSON 
                 // и ставит заголовок Content-Type: application/json
                 'json' => [
-                    'model'    => $this->config->model,
+                    'model'    => $this->model,
                     'messages' => $aiContext->getContext(),
                 ],
                 'timeout' => 30,

@@ -10,12 +10,12 @@ class UserRepository extends BaseRepository
 {
     public function getDb(): string
     {
-        return 'default';
+        return UserMigration::DB_NAME;
     }
 
     public function getTable(): string
     {
-        return 'user';
+        return UserMigration::TABLE_NAME;
     }
 
     public function getByTgId(int $tgId): ?User

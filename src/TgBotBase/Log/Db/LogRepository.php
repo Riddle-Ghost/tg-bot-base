@@ -10,12 +10,12 @@ class LogRepository extends BaseRepository
 
     protected function getDb(): string
     {
-        return 'log';
+        return LogMigration::DB_NAME;
     }
 
     protected function getTable(): string
     {
-        return 'log';
+        return LogMigration::TABLE_NAME;
     }
 
     public function save(string $type, string $text, ?int $userId = null): void
