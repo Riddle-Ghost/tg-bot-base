@@ -7,14 +7,14 @@ use Riddle\TgBotBase\Db\BaseRepository;
 
 class AiContextRepository extends BaseRepository
 {
-    protected function getDb(): string
+    public function getDb(): string
     {
-        return 'ai_context';
+        return AiContextMigration::DB_NAME;
     }
 
-    protected function getTable(): string
+    public function getTable(): string
     {
-        return 'ai_context';
+        return AiContextMigration::TABLE_NAME;
     }
 
     public function getByTgId(int $tgId): ?AiContext
