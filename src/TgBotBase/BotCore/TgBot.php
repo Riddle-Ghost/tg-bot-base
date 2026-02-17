@@ -81,6 +81,10 @@ class TgBot
                Input::TYPE_BUTTON,
                $user,
             );
+
+            if ($relatedObject->getData() === '/start') {
+                return $this->tgBotHandler->handleStart($input);
+            }
            
             return $this->tgBotHandler->handleButton($input);
         }
