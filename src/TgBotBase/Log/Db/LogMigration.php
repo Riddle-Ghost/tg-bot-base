@@ -6,7 +6,6 @@ use Riddle\TgBotBase\Db\MigrationDto;
 
 class LogMigration extends MigrationDto
 {
-    public const string DB_NAME = 'tech';
     public const string TABLE_NAME = 'logs';
 
     public function __construct()
@@ -23,6 +22,6 @@ class LogMigration extends MigrationDto
             "CREATE INDEX IF NOT EXISTS idx_user_id ON " . self::TABLE_NAME . " (user_id)",
         ];
 
-        parent::__construct(self::DB_NAME, $createTableSql, $indexSql);
+        parent::__construct($createTableSql, $indexSql);
     }
 }

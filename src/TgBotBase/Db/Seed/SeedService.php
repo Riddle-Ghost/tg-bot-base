@@ -18,15 +18,15 @@ class SeedService
         foreach ($this->config->seeds as $seed) {
             foreach ($seed->pathes as $path) {
                 if (is_dir($path)) {
-                    $this->fromDirectory($seed->dbName, $path);
+                    $this->fromDirectory($path);
                 } else {
-                    $this->fromFile($seed->dbName, $path);
+                    $this->fromFile($path);
                 }
             }
         }
     }
 
-    public function fromDirectory(string $dbName, string $directory): void
+    public function fromDirectory(string $directory): void
     {
         if (!str_ends_with($directory, '/')) {
             $directory .= '/';
@@ -38,12 +38,12 @@ class SeedService
 
         foreach (scandir($directory) as $file) {
             if (is_file($directory . $file) && pathinfo($file, PATHINFO_EXTENSION) === 'sql') {
-                $this->fromFile($dbName, $directory . $file);
+                $this->fromFile($directory . $file);
             }
         }
     }
 
-    public function fromFile(string $dbName, string $filePath): void
+    public function fromFile(string $filePath): void
     {
         if (!file_exists($filePath)) {
             throw new \InvalidArgumentException("SQL файл не найден: {$filePath}");
@@ -64,7 +64,6 @@ class SeedService
         
         foreach ($statements as $statement) {
             if (!empty($statement)) {
-                \R::selectDatabase($dbName);
                 $result = \R::exec($statement);
                 if (!$result) {
                     throw new \RuntimeException("Не удалось выполнить вставку из seed file {$filePath}");

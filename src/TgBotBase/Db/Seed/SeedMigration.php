@@ -6,7 +6,6 @@ use Riddle\TgBotBase\Db\MigrationDto;
 
 class SeedMigration extends MigrationDto
 {
-    public const string DB_NAME = 'tech';
     public const string TABLE_NAME = 'seeds';
 
     public function __construct()
@@ -17,6 +16,6 @@ class SeedMigration extends MigrationDto
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )";
 
-        parent::__construct(self::DB_NAME, $createTableSql, []);
+        parent::__construct($createTableSql, []);
     }
 }

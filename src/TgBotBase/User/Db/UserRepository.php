@@ -4,15 +4,9 @@ namespace Riddle\TgBotBase\User\Db;
 
 use Riddle\TgBotBase\User\Entity\User;
 use Riddle\TgBotBase\User\Entity\Settings;
-use Riddle\TgBotBase\Db\BaseRepository;
 
-class UserRepository extends BaseRepository
+class UserRepository
 {
-    public function getDb(): string
-    {
-        return UserMigration::DB_NAME;
-    }
-
     public function getTable(): string
     {
         return UserMigration::TABLE_NAME;
@@ -55,8 +49,6 @@ class UserRepository extends BaseRepository
 
     private function getModel(int $tgId): ?\RedBeanPHP\OODBBean
     {
-        $this->switchDb();
-
         return \R::findOne($this->getTable(), 'tg_id = ?', [$tgId]);
     }
 }

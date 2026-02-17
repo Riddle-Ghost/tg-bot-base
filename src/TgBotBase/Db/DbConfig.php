@@ -10,7 +10,6 @@ class DbConfig
         public readonly string $dbDir,
         public private(set) array $migrations = [],
         public private(set) array $seeds = [],
-        public private(set) array $sqlExecutions = [],
     ) {}
 
     /**
@@ -32,14 +31,4 @@ class DbConfig
 
         return $this;
     }
-
-    /**
-     * SQL выполняется при запуске скрипта.
-     */
-    public function addExecution(string $sql): self
-    {
-        $this->sqlExecutions[] = $sql;
-
-        return $this;
-    }    
 }

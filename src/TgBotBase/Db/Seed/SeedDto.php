@@ -5,7 +5,6 @@ namespace Riddle\TgBotBase\Db\Seed;
 class SeedDto
 {
     public function __construct(
-        public readonly string $dbName,
         public private(set) array $pathes = [],
     ) {}
 

@@ -17,7 +17,6 @@ class GetTestDbConfig
         mkdir($dbConfig->dbDir, 0777, true);
 
         $tableTech1 = new MigrationDto(
-            'tech',
             "CREATE TABLE IF NOT EXISTS test_table_tech_1 (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 tag VARCHAR(50),
@@ -32,7 +31,6 @@ class GetTestDbConfig
         $dbConfig->addMigration($tableTech1);
 
         $tableTech2 = new MigrationDto(
-            'tech',
             "CREATE TABLE IF NOT EXISTS test_table_tech_2 (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 tag VARCHAR(50),
@@ -47,7 +45,6 @@ class GetTestDbConfig
         $dbConfig->addMigration($tableTech2);
 
         $tableTestDb = new MigrationDto(
-            'test_db',
             "CREATE TABLE IF NOT EXISTS test_table_test_db (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 tag VARCHAR(50),
@@ -61,19 +58,19 @@ class GetTestDbConfig
 
         $dbConfig->addMigration($tableTestDb);
 
-        $seedDto1 = new SeedDto('test_db');
+        $seedDto1 = new SeedDto();
         $seedDto1->addDirectoryOrFile(__DIR__ . '/dump/test.sql');
         $dbConfig->addSeed($seedDto1);
 
-        $seedDto2 = new SeedDto('test_db');
+        $seedDto2 = new SeedDto();
         $seedDto2->addDirectoryOrFile(__DIR__ . '/dump');
         $dbConfig->addSeed($seedDto2);
 
-        $seedDto3 = new SeedDto('tech');
+        $seedDto3 = new SeedDto();
         $seedDto3->addDirectoryOrFile(__DIR__ . '/dump/dir');
         $dbConfig->addSeed($seedDto3);
 
-        $seedDto4 = new SeedDto('tech');
+        $seedDto4 = new SeedDto();
         $seedDto4->addDirectoryOrFile(__DIR__ . '/dump/dir/');
         $dbConfig->addSeed($seedDto4);
 

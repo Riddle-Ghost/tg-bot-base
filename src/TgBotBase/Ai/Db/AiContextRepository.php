@@ -3,15 +3,9 @@
 namespace Riddle\TgBotBase\Ai\Db;
 
 use Riddle\TgBotBase\Ai\Entity\AiContext;
-use Riddle\TgBotBase\Db\BaseRepository;
 
-class AiContextRepository extends BaseRepository
+class AiContextRepository
 {
-    public function getDb(): string
-    {
-        return AiContextMigration::DB_NAME;
-    }
-
     public function getTable(): string
     {
         return AiContextMigration::TABLE_NAME;
@@ -50,8 +44,6 @@ class AiContextRepository extends BaseRepository
 
     private function getModel(int $tgId): ?\RedBeanPHP\OODBBean
     {
-        $this->switchDb();
-
         return \R::findOne($this->getTable(), 'tg_id = ?', [$tgId]);
     }
 }

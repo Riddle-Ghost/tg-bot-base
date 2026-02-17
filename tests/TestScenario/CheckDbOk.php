@@ -23,11 +23,7 @@ class CheckDbOk
     private function checkDbFiles(): void
     {
         $dbFiles = [
-            UserMigration::DB_NAME,
-            AiContextMigration::DB_NAME,
-            LogMigration::DB_NAME,
-            SeedMigration::DB_NAME,
-            'tech',
+            'default',
         ];
 
         foreach ($dbFiles as $file) {
@@ -44,17 +40,16 @@ class CheckDbOk
     private function checkDbTables(): void
     {
         $dbToTable = [
-            UserMigration::DB_NAME => UserMigration::TABLE_NAME,
-            AiContextMigration::DB_NAME => AiContextMigration::TABLE_NAME,
-            LogMigration::DB_NAME => LogMigration::TABLE_NAME,
-            SeedMigration::DB_NAME => SeedMigration::TABLE_NAME,
-            'tech' => 'test_table_tech_1',
-            'tech' => 'test_table_tech_2',
-            'test_db' => 'test_table_test_db',
+            'default' => UserMigration::TABLE_NAME,
+            'default' => AiContextMigration::TABLE_NAME,
+            'default' => LogMigration::TABLE_NAME,
+            'default' => SeedMigration::TABLE_NAME,
+            'default' => 'test_table_tech_1',
+            'default' => 'test_table_tech_2',
+            'default' => 'test_table_test_db',
         ];
 
         foreach ($dbToTable as $db => $table) {
-            \R::selectDatabase($db);
             $tables = \R::inspect();
             
             if (!in_array($table, $tables)) {
@@ -68,17 +63,16 @@ class CheckDbOk
 
     private function checkSeeds(): void
     {
-        $this->testSeedsInTable('tech', 'test_table_tech_1', 10);
-        $this->testSeedsInTable('tech', 'test_table_tech_2', 10);
-        $this->testSeedsInTable('test_db', 'test_table_test_db', 10);
-        $this->testSeedsInTable('tech', 'seeds', 3);
+        $this->testSeedsInTable('test_table_tech_1', 10);
+        $this->testSeedsInTable('test_table_tech_2', 10);
+        $this->testSeedsInTable('test_table_test_db', 10);
+        $this->testSeedsInTable('seeds', 3);
 
         VarDump::success('Проверка сидов ОК');
     }
 
-    private function testSeedsInTable(string $db, string $table, int $expectedCount): void
+    private function testSeedsInTable(string $table, int $expectedCount): void
     {
-        \R::selectDatabase($db);
         $count = \R::count($table);
 
         if ($count !== $expectedCount) {

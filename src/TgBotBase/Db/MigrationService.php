@@ -11,13 +11,15 @@ require_once __DIR__ . '/rb-sqlite.php';
 
 class MigrationService
 {
+    public const string DEFAULT_DB_NAME = 'default';
+
     public function __construct(
         public readonly DbConfig $config,
     ) {}
 
     public function migrateAll(): void
     {
-        \R::setup($this->getDsn(UserMigration::DB_NAME));
+        \R::setup($this->getDsn(self::DEFAULT_DB_NAME));
         $this->migrate(new UserMigration());
         $this->migrate(new AiContextMigration());
         $this->migrate(new LogMigration());
@@ -30,24 +32,19 @@ class MigrationService
 
     public function migrate(MigrationDto $dto): void
     {
-        if (!\R::hasDatabase($dto->dbName)) {
-            \R::addDatabase($dto->dbName, self::getDsn($dto->dbName));
-        }
-
-        \R::selectDatabase($dto->dbName);
         $result = \R::exec($dto->createTableSql);
         foreach ($dto->indexSql as $indexSql) {
             $result = \R::exec($indexSql);
         }
     }
 
-    public function getDsn(string $dbName): string
+    public function getDsn(): string
     {
-        return 'sqlite:' . $this->getPath($dbName);
+        return 'sqlite:' . $this->databaseFilePath();
     }
 
-    public function getPath(string $dbName): string
+    public function databaseFilePath(): string
     {
-        return $this->config->dbDir . '/' . $dbName . '.sqlite';
+        return $this->config->dbDir . '/' . self::DEFAULT_DB_NAME . '.sqlite';
     }
 }

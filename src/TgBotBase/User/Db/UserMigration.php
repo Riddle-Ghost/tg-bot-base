@@ -6,7 +6,6 @@ use Riddle\TgBotBase\Db\MigrationDto;
 
 class UserMigration extends MigrationDto
 {
-    public const string DB_NAME = 'users';
     public const string TABLE_NAME = 'users';
 
     public function __construct()
@@ -25,6 +24,6 @@ class UserMigration extends MigrationDto
             "CREATE UNIQUE INDEX IF NOT EXISTS idx_tg_id ON " . self::TABLE_NAME . " (tg_id)",
         ];
 
-        parent::__construct(self::DB_NAME, $createTableSql, $indexSql);
+        parent::__construct($createTableSql, $indexSql);
     }
 }

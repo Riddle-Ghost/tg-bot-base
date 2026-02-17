@@ -2,16 +2,9 @@
 
 namespace Riddle\TgBotBase\Log\Db;
 
-use Riddle\TgBotBase\Db\BaseRepository;
-
-class LogRepository extends BaseRepository
+class LogRepository
 {
     public const TYPE_AI_REQUEST = 'ai_request';
-
-    protected function getDb(): string
-    {
-        return LogMigration::DB_NAME;
-    }
 
     protected function getTable(): string
     {
@@ -20,8 +13,6 @@ class LogRepository extends BaseRepository
 
     public function save(string $type, string $text, ?int $userId = null): void
     {
-        $this->switchDb();
-
         $bean = \R::dispense($this->getTable());
         $bean->type = $type;
         $bean->user_id = $userId;

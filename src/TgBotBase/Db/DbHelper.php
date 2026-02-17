@@ -17,12 +17,6 @@ class DbHelper
         $seedService = new SeedService($config, new SeedRepository());
         $seedService->seedAll();
 
-        foreach ($config->sqlExecutions as $sql) {
-            $result = \R::exec($sql);
-            if (!$result) {
-                throw new \RuntimeException("Не удалось выполнить SQL запрос: {$sql}");
-            }
-        }
         \R::freeze(true); // RedBean не будет пытаться менять структуру БД
     }
 }
