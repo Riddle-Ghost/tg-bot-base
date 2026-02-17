@@ -1,8 +1,8 @@
 <?php
 
-require __DIR__.'/vendor/autoload.php';
-require __DIR__.'/tests/TestScenario/TestTgBotHandler.php';
-require __DIR__.'/tests/TestScenario/GetTestDbConfig.php';
+require __DIR__.'/../../vendor/autoload.php';
+require __DIR__.'/TestTgBotHandler.php';
+require __DIR__.'/GetTestDbConfig.php';
 
 use Riddle\TgBotBase\Ai\AiService;
 use Riddle\TgBotBase\BotCore\TgBot;
@@ -21,7 +21,7 @@ $dbConfig = (new GetTestDbConfig())();
 $tgBotConfig = new TgBotConfig($tgBotToken, $dbConfig);
 
 $api = new OpenaiPromptAPI(
-    $aiToken,
+    $openaiApiKey,
     $openaiPromptId,
 );
 $aiService = new AiService($api);
