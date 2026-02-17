@@ -26,6 +26,10 @@ class DbConfig
      */
     public function addSeedDirectory(string $directory): self
     {
+        if (!str_ends_with($directory, '/')) {
+            $directory .= '/';
+        }
+
         if (!is_dir($directory)) {
             throw new \InvalidArgumentException("Директория не найдена: {$directory}");
         }

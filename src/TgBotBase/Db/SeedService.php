@@ -16,6 +16,7 @@ class SeedService
             if (\R::count('seeds', 'file = ?', [$seedFile]) < 1) {
                 $this->fromFile($seedFile);
                 \R::exec("INSERT INTO seeds (file) VALUES (?)", [$seedFile]);
+                echo $seedFile . ' seed done' . PHP_EOL;
             }
         }
     }
