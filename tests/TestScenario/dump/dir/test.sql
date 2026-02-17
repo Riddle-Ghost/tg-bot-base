@@ -1,0 +1,10 @@
+INSERT INTO test_table_tech_2 (tag, name, info) VALUES('test_tag_1','test_name_1','test_info_1');
+INSERT INTO test_table_tech_2 (tag, name, info) VALUES('test_tag_2','test_name_2','test_info_2');
+INSERT INTO test_table_tech_2 (tag, name, info) VALUES('test_tag_3','test_name_3','test_info_3');
+INSERT INTO test_table_tech_2 (tag, name, info) VALUES('test_tag_4','test_name_4','test_info_4');
+INSERT INTO test_table_tech_2 (tag, name, info) VALUES('test_tag_5','test_name_5','test_info_5');
+INSERT INTO test_table_tech_2 (tag, name, info) VALUES('test_tag_6','test_name_6','test_info_6');
+INSERT INTO test_table_tech_2 (tag, name, info) VALUES('test_tag_7','test_name_7','test_info_7');
+INSERT INTO test_table_tech_2 (tag, name, info) VALUES('test_tag_8','test_name_8','test_info_8');
+INSERT INTO test_table_tech_2 (tag, name, info) VALUES('test_tag_9','test_name_9','test_info_9');
+INSERT INTO test_table_tech_2 (tag, name, info) VALUES('test_tag_10','test_name_10','test_info_10');

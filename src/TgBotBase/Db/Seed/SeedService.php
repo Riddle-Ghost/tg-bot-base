@@ -49,8 +49,6 @@ class SeedService
             throw new \InvalidArgumentException("SQL файл не найден: {$filePath}");
         }
 
-        \R::selectDatabase($dbName);
-
         $count = $this->seedRepository->getCount($filePath);
 
         if ($count > 0) {
@@ -66,7 +64,11 @@ class SeedService
         
         foreach ($statements as $statement) {
             if (!empty($statement)) {
-                \R::exec($statement);
+                \R::selectDatabase($dbName);
+                $result = \R::exec($statement);
+                if (!$result) {
+                    throw new \RuntimeException("Не удалось выполнить вставку из seed file {$filePath}");
+                }
             }
         }
 

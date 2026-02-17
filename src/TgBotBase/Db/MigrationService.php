@@ -35,9 +35,9 @@ class MigrationService
         }
 
         \R::selectDatabase($dto->dbName);
-        \R::exec($dto->createTableSql);
+        $result = \R::exec($dto->createTableSql);
         foreach ($dto->indexSql as $indexSql) {
-            \R::exec($indexSql);
+            $result = \R::exec($indexSql);
         }
     }
 

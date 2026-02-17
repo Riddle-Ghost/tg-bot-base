@@ -16,22 +16,37 @@ class GetTestDbConfig
 
         mkdir($dbConfig->dbDir, 0777, true);
 
-        $categoriesMigration = new MigrationDto(
+        $tableTech1 = new MigrationDto(
             'tech',
-            "CREATE TABLE IF NOT EXISTS test_table_tech (
+            "CREATE TABLE IF NOT EXISTS test_table_tech_1 (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 tag VARCHAR(50),
                 name VARCHAR(50),
                 info TEXT
             )",
             [
-                "CREATE UNIQUE INDEX IF NOT EXISTS idx_tag ON test_table_tech (tag)",
+                "CREATE UNIQUE INDEX IF NOT EXISTS idx_tag ON test_table_tech_1 (tag)",
             ]
         );
 
-        $dbConfig->addMigration($categoriesMigration);
+        $dbConfig->addMigration($tableTech1);
 
-        $categoriesMigration = new MigrationDto(
+        $tableTech2 = new MigrationDto(
+            'tech',
+            "CREATE TABLE IF NOT EXISTS test_table_tech_2 (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                tag VARCHAR(50),
+                name VARCHAR(50),
+                info TEXT
+            )",
+            [
+                "CREATE UNIQUE INDEX IF NOT EXISTS idx_tag ON test_table_tech_2 (tag)",
+            ]
+        );
+
+        $dbConfig->addMigration($tableTech2);
+
+        $tableTestDb = new MigrationDto(
             'test_db',
             "CREATE TABLE IF NOT EXISTS test_table_test_db (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,11 +59,23 @@ class GetTestDbConfig
             ]
         );
 
-        $dbConfig->addMigration($categoriesMigration);
+        $dbConfig->addMigration($tableTestDb);
 
-        $seedDto = new SeedDto('tech');
-        $seedDto->addDirectoryOrFile(__DIR__ . '/dump/');
-        $dbConfig->addSeed($seedDto);
+        $seedDto1 = new SeedDto('test_db');
+        $seedDto1->addDirectoryOrFile(__DIR__ . '/dump/test.sql');
+        $dbConfig->addSeed($seedDto1);
+
+        $seedDto2 = new SeedDto('test_db');
+        $seedDto2->addDirectoryOrFile(__DIR__ . '/dump');
+        $dbConfig->addSeed($seedDto2);
+
+        $seedDto3 = new SeedDto('tech');
+        $seedDto3->addDirectoryOrFile(__DIR__ . '/dump/dir');
+        $dbConfig->addSeed($seedDto3);
+
+        $seedDto4 = new SeedDto('tech');
+        $seedDto4->addDirectoryOrFile(__DIR__ . '/dump/dir/');
+        $dbConfig->addSeed($seedDto4);
 
         return $dbConfig;
     }

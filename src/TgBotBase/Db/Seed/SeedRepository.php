@@ -29,6 +29,9 @@ class SeedRepository extends BaseRepository
     {
         $this->switchDb();
 
-        \R::exec("INSERT INTO " . $this->getTable() . " (file) VALUES (?)", [$filePath]);
+        $result = \R::exec("INSERT INTO " . $this->getTable() . " (file) VALUES (?)", [$filePath]);
+        if (!$result) {
+            throw new \RuntimeException("Не удалось добавить сид");
+        }
     }
 }

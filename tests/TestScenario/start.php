@@ -3,6 +3,7 @@
 require __DIR__.'/../../vendor/autoload.php';
 require __DIR__.'/TestTgBotHandler.php';
 require __DIR__.'/GetTestDbConfig.php';
+require __DIR__.'/CheckDbOk.php';
 
 use Riddle\TgBotBase\Ai\AiService;
 use Riddle\TgBotBase\BotCore\TgBot;
@@ -55,4 +56,5 @@ $aiService = new AiServiceContextDecorator($aiService, 1500);
 $aiService = new AiServiceLogDecorator($aiService);
         
 $tgBot = new TgBot(new TestTgBotHandler($aiService), $tgBotConfig);
+(new CheckDbOk($dbConfig))();
 $tgBot->run();
