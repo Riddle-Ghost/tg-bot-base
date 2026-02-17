@@ -18,8 +18,8 @@ class BaseApi implements ApiInterface
     )
     {
         $this->client = new Client([
-            'timeout'  => 180.0, // Время ожидания ответа в секундах
-            'connect_timeout' => 30.0, // Время на установку соединения
+            'timeout'  => 140.0, // Время ожидания ответа в секундах
+            'connect_timeout' => 20.0, // Время на установку соединения
         ]);
     }
 
