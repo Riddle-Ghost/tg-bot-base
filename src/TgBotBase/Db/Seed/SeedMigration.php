@@ -1,6 +1,6 @@
 <?php
 
-namespace Riddle\TgBotBase\Db;
+namespace Riddle\TgBotBase\Db\Seed;
 
 use Riddle\TgBotBase\Db\MigrationDto;
 

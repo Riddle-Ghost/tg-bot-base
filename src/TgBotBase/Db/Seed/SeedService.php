@@ -1,27 +1,32 @@
 <?php
 
-namespace Riddle\TgBotBase\Db;
+namespace Riddle\TgBotBase\Db\Seed;
 
-require_once __DIR__ . '/rb-sqlite.php';
+use Riddle\TgBotBase\Db\DbConfig;
+
+require_once __DIR__ . '/../rb-sqlite.php';
 
 class SeedService
 {
     public function __construct(
-        public readonly DbConfig $config,
+        private DbConfig $config,
+        private SeedRepository $seedRepository,
     ) {}
 
     public function seedAll(): void
     {
-        foreach ($this->config->seedFiles as $seedFile) {
-            if (\R::count('seeds', 'file = ?', [$seedFile]) < 1) {
-                $this->fromFile($seedFile);
-                \R::exec("INSERT INTO seeds (file) VALUES (?)", [$seedFile]);
-                echo $seedFile . ' seed done' . PHP_EOL;
+        foreach ($this->config->seeds as $seed) {
+            foreach ($seed->pathes as $path) {
+                if (is_dir($path)) {
+                    $this->fromDirectory($seed->dbName, $path);
+                } else {
+                    $this->fromFile($seed->dbName, $path);
+                }
             }
         }
     }
 
-    public function fromDirectory(string $directory): void
+    public function fromDirectory(string $dbName, string $directory): void
     {
         if (!str_ends_with($directory, '/')) {
             $directory .= '/';
@@ -33,15 +38,23 @@ class SeedService
 
         foreach (scandir($directory) as $file) {
             if (is_file($directory . $file) && pathinfo($file, PATHINFO_EXTENSION) === 'sql') {
-                $this->fromFile($directory . $file);
+                $this->fromFile($dbName, $directory . $file);
             }
         }
     }
 
-    public function fromFile(string $filePath): void
+    public function fromFile(string $dbName, string $filePath): void
     {
         if (!file_exists($filePath)) {
             throw new \InvalidArgumentException("SQL файл не найден: {$filePath}");
+        }
+
+        \R::selectDatabase($dbName);
+
+        $count = $this->seedRepository->getCount($filePath);
+
+        if ($count > 0) {
+            return;
         }
 
         $sql = file_get_contents($filePath);
@@ -56,5 +69,8 @@ class SeedService
                 \R::exec($statement);
             }
         }
+
+        $this->seedRepository->insert($filePath);
+        echo $filePath . ' seed done' . PHP_EOL;
     }
 }

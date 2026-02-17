@@ -2,6 +2,9 @@
 
 namespace Riddle\TgBotBase\Db;
 
+use Riddle\TgBotBase\Db\Seed\SeedService;
+use Riddle\TgBotBase\Db\Seed\SeedRepository;
+
 require_once __DIR__ . '/rb-sqlite.php';
 
 class DbHelper
@@ -11,7 +14,7 @@ class DbHelper
         $migrationService = new MigrationService($config);
         $migrationService->migrateAll();
 
-        $seedService = new SeedService($config);
+        $seedService = new SeedService($config, new SeedRepository());
         $seedService->seedAll();
 
         foreach ($config->sqlExecutions as $sql) {

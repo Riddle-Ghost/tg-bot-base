@@ -4,7 +4,7 @@ namespace Riddle\TgBotBase\Db;
 
 use Riddle\TgBotBase\Ai\Db\AiContextMigration;
 use Riddle\TgBotBase\Log\Db\LogMigration;
-use Riddle\TgBotBase\Db\SeedMigration;
+use Riddle\TgBotBase\Db\Seed\SeedMigration;
 use Riddle\TgBotBase\User\Db\UserMigration;
 
 require_once __DIR__ . '/rb-sqlite.php';

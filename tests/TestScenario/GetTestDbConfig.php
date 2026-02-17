@@ -2,6 +2,7 @@
 
 use Riddle\TgBotBase\Db\DbConfig;
 use Riddle\TgBotBase\Db\MigrationDto;
+use Riddle\TgBotBase\Db\Seed\SeedDto;
 
 class GetTestDbConfig
 {
@@ -45,7 +46,9 @@ class GetTestDbConfig
 
         $dbConfig->addMigration($categoriesMigration);
 
-        $dbConfig->addSeedDirectory(__DIR__ . '/dump/');
+        $seedDto = new SeedDto('tech');
+        $seedDto->addDirectoryOrFile(__DIR__ . '/dump/');
+        $dbConfig->addSeed($seedDto);
 
         return $dbConfig;
     }
